@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -13,8 +14,16 @@ np.random.seed(42)
 
 # --- Tarefa 1: Carregar os dados ---
 print("--- Tarefa 1: Carregando os dados ---")
-train_df = pd.read_csv("california_housing_train.csv")
-test_df = pd.read_csv("california_housing_test.csv")
+# Descobre o diretório absoluto onde o arquivo .py atual está localizado
+diretorio_atual = os.path.dirname(os.path.abspath(__file__))
+
+# Constrói o caminho completo até os arquivos CSV de forma segura
+caminho_treino = os.path.join(diretorio_atual, "california_housing_train.csv")
+caminho_teste = os.path.join(diretorio_atual, "california_housing_test.csv")
+
+# Carrega os DataFrames usando os caminhos absolutos gerados dinamicamente
+train_df = pd.read_csv(caminho_treino)
+test_df = pd.read_csv(caminho_teste)
 print("Dados carregados com sucesso!\n")
 
 # --- Tarefa 2: Exibir informações básicas ---
@@ -55,7 +64,7 @@ y_test = test_df[target_col].values
 
 # Divisão do treino original para obter o conjunto de validação (80% treino / 20% validação)
 X_train, X_val, y_train, y_val = train_test_split(
-    X_train_full, y_train_full, test_size=0.2, random_seed=42
+    X_train_full, y_train_full, test_size=0.2, random_state=42
 )
 
 print(f"Treino final: {X_train.shape}, Alvo: {y_train.shape}")
